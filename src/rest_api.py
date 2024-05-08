@@ -29,6 +29,8 @@ with r.pipeline() as pipe:
         pipe.hset(pid, mapping=product)
     pipe.execute()
 
+print(r.keys())
+
 api.add_resource(Product, '/product', '/product/<int:product_id>')
 api.add_resource(ProductList, '/products')
 

@@ -22,7 +22,7 @@ class Product(Resource):
         product_id = f"product:{random.getrandbits(32)}"
 
         r.hset(product_id, mapping=args)
-        return f"New product created: {product_id}", 201
+        return { product_id: args }, 201
 
     def put(self, product_id):
         pid = f"product:{product_id}"
@@ -42,6 +42,11 @@ class Product(Resource):
         return updated_product, 200
 
     def delete(self, product_id):
+        pid = f"product:{product_id}"
+        product = r.exists(pid)
+
+        if not product:
+            abort(404, message=f"{pid} doesn't exist")
         r.delete(f"product:{product_id}")
         return '', 204
 
